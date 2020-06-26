@@ -1,0 +1,26 @@
+[
+    {
+        "Item":"ISMB",
+        "Description":"125 x 75 x 5",
+        "Length": 6,
+        "UnitWeight":13.30
+    },
+    {
+        "Item":"ISMB",
+        "Description":"125 x 75 x 5",
+        "Length": 12,
+        "UnitWeight":13.30
+    },
+    {
+        "Item":"ISMB",
+        "Description":"150 x 75 x 5",
+        "Length": 6,
+        "UnitWeight":15
+    },
+    {
+        "Item":"ISMB",
+        "Description":"150 x 75 x 5",
+        "Length": 12,
+        "UnitWeight":15
+    }
+]
