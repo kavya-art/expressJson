@@ -1,4 +1,6 @@
 const Instrument = require("../model/instrument.js");
+const ExcelJS = require('exceljs');
+const wb1 = new ExcelJS.Workbook();
 
 // Create and Save a new Customer
 exports.create = (req, res) => {
@@ -111,3 +113,61 @@ exports.getAllInstruments = (req,res) =>{
         res.json(data);
     })
 }
+
+exports.AddSteel = (req,res) => {
+    var return_data = [];
+    //Get sheets data into Database
+    var Workbook = new ExcelJS.Workbook();
+    Workbook.xlsx.readFile("./SteelDetails.xlsx").then(function () {
+        
+        var worksheet=Workbook.getWorksheet('Sheet1');
+        worksheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
+            
+            if(rowNumber>=15 && row.getCell(1).value!=null)
+            {
+                
+                var dimension = String(row.getCell(2).value).split(' x' );
+                var dimen1 = dimension[0];
+                dimension.splice(0,1);
+                var dimen2 = dimension.join(' x ');
+                var steel = new Instrument({
+                    Name:row.getCell(1).value,
+                    Dimension1:dimen1,
+                    Dimension2:dimen2,
+                    Length:row.getCell(3).value,
+                    UnitWeight:row.getCell(5).value
+                });
+                //console.log(steel);
+                Instrument.AddSteel(steel,(error,data)=>{
+                    return_data.push(data);
+                  
+                });
+            }
+          });
+    });
+    res.json(return_data);
+}
+
+exports.getAllSteelData= (req,res)=>{
+    console.log("Got into API");
+    Instrument.getAllSteelData((err,data)=>{
+        if(!err)
+        {
+            data = data.sort(function(a,b){
+                a = a.Name.toLowerCase();
+                b = b.Name.toLowerCase();
+                return a<b?-1:a>b?1:0
+            })
+            console.log()
+            res.json({
+                status:'OK',
+                results:data
+            });
+        }
+        else
+        {
+            res.status(500).json({message:err.message || "Some error occured"});
+        }
+    })
+}
+

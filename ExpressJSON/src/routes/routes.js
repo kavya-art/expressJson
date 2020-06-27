@@ -21,4 +21,9 @@ module.exports = app => {
 
     //Get Instruments
     app.get("/Instruments",instruments.getAllInstruments);
+
+    app.post("/AddSteel",instruments.AddSteel);
+
+    //Get all steel Details
+    app.get("/GetSteelData",instruments.getAllSteelData);
   };

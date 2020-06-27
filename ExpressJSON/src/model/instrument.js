@@ -2,9 +2,11 @@ const sql = require("./db.js");
 const { json } = require("body-parser");
 
 const Instrument = function(instrument){
-    this.email = instrument.email;
-    this.name = instrument.name;
-    this.active = instrument.active;
+    this.Name = instrument.Name;
+    this.Dimension1 = instrument.Dimension1;
+    this.Dimension2 = instrument.Dimension2;
+    this.UnitWeight = instrument.UnitWeight;
+    this.Length = instrument.Length;
 };
 
 Instrument.create = (newCustomer, result) => {
@@ -109,10 +111,35 @@ Instrument.removeAll = result => {
 
 
 
-// By Murali fro getting data from the json file
+// By Murali for getting data from the json file
 Instrument.getAllInstruments =(result) =>{
     var data = require("../data.json");
     result(data);
 }
+
+Instrument.AddSteel=(newIInstrument,result)=>{
+
+    console.log("DB Call");
+    sql.query("INSERT INTO tbl_steedetails SET ?", newIInstrument, (err, res) => {
+        if(!err)
+        {
+            console.log("created instrument: ", { id: res.insertId, ...newIInstrument });
+            return;
+        }
+        
+    });
+}
+
+Instrument.getAllSteelData = result => {
+    sql.query("SELECT * FROM tbl_steedetails", (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+    //   console.log("SteelDetails: ", res);
+      result(null, res);
+    });
+  };
 
 module.exports = Instrument;
